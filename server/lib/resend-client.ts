@@ -113,6 +113,7 @@ export async function sendVerificationEmail(toEmail: string, verificationToken: 
       const [resp] = await sgMail.send({
         from: sg.fromEmail,
         to: toEmail,
+        replyTo: 'support@linxova.com',
         subject,
         html,
       });
@@ -129,6 +130,7 @@ export async function sendVerificationEmail(toEmail: string, verificationToken: 
   const { data, error } = await client.emails.send({
     from: fromEmail,
     to: toEmail,
+    replyTo: 'support@linxova.com',
     subject,
     html,
   });
