@@ -15,7 +15,7 @@ interface TutorialSlide {
 
 const freelancerSlides: TutorialSlide[] = [
   {
-    title: "Welcome to Linxora",
+    title: "Welcome to Linxova",
     description: "Your professional freelance marketplace. Let's get you started with the key features.",
     icon: Star,
     tips: [
@@ -78,7 +78,7 @@ const freelancerSlides: TutorialSlide[] = [
 
 const customerSlides: TutorialSlide[] = [
   {
-    title: "Welcome to Linxora",
+    title: "Welcome to Linxova",
     description: "Post jobs and find talented freelancers for your projects.",
     icon: Star,
     tips: [

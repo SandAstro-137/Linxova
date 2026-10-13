@@ -88,7 +88,7 @@ const moderatorSteps: OnboardingStep[] = [
 
 const freelancerSteps: OnboardingStep[] = [
   {
-    title: "Welcome to Linxora!",
+    title: "Welcome to Linxova!",
     description: "Start earning as a freelancer on our platform.",
     content: (
       <div className="space-y-4">
@@ -311,7 +311,7 @@ const headOfModerationSteps: OnboardingStep[] = [
 const founderSteps: OnboardingStep[] = [
   {
     title: "Welcome, Founder!",
-    description: "You have full administrative access to Linxora.",
+    description: "You have full administrative access to Linxova.",
     content: (
       <div className="space-y-4">
         <p>As the Founder, you can:</p>

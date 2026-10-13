@@ -421,7 +421,7 @@ function AppContent() {
       setShowOnboarding(false);
       refetchUser();
       toast({
-        title: "Welcome to Linxora!",
+        title: "Welcome to Linxova!",
         description: "You're all set to get started.",
       });
     } catch (error) {
@@ -458,19 +458,19 @@ function AppContent() {
                 <div className="flex flex-wrap items-center gap-2">
                   <img 
                     src={logoLight} 
-                    alt="Linxora Logo" 
+                    alt="Linxova Logo" 
                     className="h-10 max-h-12 dark:hidden"
                     style={{ objectFit: "contain" }}
                     data-testid="img-logo-light"
                   />
                   <img 
                     src={logoDark} 
-                    alt="Linxora Logo" 
+                    alt="Linxova Logo" 
                     className="h-10 max-h-12 hidden dark:block"
                     style={{ objectFit: "contain" }}
                     data-testid="img-logo-dark"
                   />
-                  <span className="text-lg font-semibold" data-testid="text-app-name">Linxora</span>
+                  <span className="text-lg font-semibold" data-testid="text-app-name">Linxova</span>
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-2">

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SiDiscord } from "react-icons/si";
 import { useAuth } from "@/lib/auth-context";
 import { Briefcase, Wallet, Shield, Users } from "lucide-react";
 import logoLight from "@assets/logo-light.png";
@@ -25,16 +24,16 @@ export default function LoginPage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <img 
               src={logoLight} 
-              alt="Linxora" 
+              alt="Linxova" 
               className="w-12 h-12 dark:hidden"
             />
             <img 
               src={logoDark} 
-              alt="Linxora" 
+              alt="Linxova" 
               className="w-12 h-12 hidden dark:block"
             />
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-              Linxora
+              Linxova
             </h1>
           </div>
           <p className="text-xl text-muted-foreground">
@@ -51,26 +50,9 @@ export default function LoginPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <Button
-                onClick={() => login()}
-                size="lg"
-                className="w-full text-base gap-2"
-                data-testid="button-discord-login"
-              >
-                <SiDiscord className="w-5 h-5" />
-                Continue with Discord
-              </Button>
-              
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    Or try demo accounts
-                  </span>
-                </div>
-              </div>
+              <p className="text-sm text-muted-foreground text-center uppercase tracking-wide">
+                Choose an account to continue
+              </p>
 
               <div className="space-y-2">
                 {demoAccounts.map((account) => (

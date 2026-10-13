@@ -6,7 +6,6 @@ import { storage, type CalendarEvent } from "./storage";
 import { requireAuth, requireRole } from "./middleware/auth";
 import { insertJobSchema, insertPTORequestSchema, insertInvitationSchema, insertCancellationRequestSchema, getLevelPayout, getLevelFromEarnings, workingHoursSchema, insertTeamNoteSchema, insertTeamTaskSchema, insertTeamMessageSchema, insertRatingSchema, insertCustomerRatingSchema, insertRoleUpgradeRequestSchema, RoleUpgradeStatus, RoleUpgradeType, UserRole, insertReportSchema, ReportStatus, insertModeratorTaskSchema, ModeratorTaskStatus, ModeratorTaskType, insertModeratorMeetingSchema, insertMeetingRsvpSchema, MeetingRsvpStatus, insertTeamRoomMessageSchema, JobStatus, EscrowStatus, ScheduledTaskStatus, DisputeStatus, insertJobSubmissionSchema, JobSubmissionStatus, insertLeadershipVoteSchema, insertLeadershipVoteCastSchema, insertMeetingSchema, LeadershipVoteStatus, LeadershipVoteChoice, MeetingStatus, AbandonStatus } from "@shared/schema";
 import { getCryptoPrices } from "./lib/coingecko";
-import { postToDiscordWebhook } from "./lib/discord-client";
 import { getCryptoPriceService } from "./lib/crypto-price-ws";
 import { filterContent, sanitizeText, isSpamLike } from "./lib/content-filter";
 import { z } from "zod";
@@ -281,7 +280,6 @@ declare module "express-session" {
   interface SessionData {
     userId?: string;
     userRole?: string;
-    oauthState?: string;
   }
 }
 
@@ -368,138 +366,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(user);
     } catch (error) {
       res.status(500).json({ error: "Login failed" });
-    }
-  });
-
-  // Auth routes - Discord OAuth (Direct implementation)
-  app.get("/api/auth/discord", async (req, res) => {
-    try {
-      const clientId = process.env.DISCORD_CLIENT_ID;
-      const redirectUri = process.env.DISCORD_REDIRECT_URI;
-
-      if (!clientId || !redirectUri) {
-        console.error("Discord OAuth missing config:", { clientId: !!clientId, redirectUri: !!redirectUri });
-        return res.status(500).json({ error: "Discord OAuth not configured" });
-      }
-
-      // Generate state for CSRF protection
-      const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      req.session.oauthState = state;
-
-      // Build Discord OAuth URL
-      const params = new URLSearchParams({
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        response_type: 'code',
-        scope: 'identify email',
-        state: state,
-      });
-
-      const oauthUrl = `https://discord.com/oauth2/authorize?${params.toString()}`;
-      res.redirect(oauthUrl);
-    } catch (error) {
-      console.error("Discord OAuth error:", error);
-      res.status(500).json({ error: "Failed to initiate Discord login" });
-    }
-  });
-
-  app.get("/api/auth/callback", async (req, res) => {
-    try {
-      const { code, state, error: oauthError } = req.query;
-      
-      // Handle OAuth errors
-      if (oauthError) {
-        console.error("Discord OAuth error:", oauthError);
-        return res.redirect("/?error=oauth_denied");
-      }
-
-      if (!code) {
-        return res.redirect("/?error=no_code");
-      }
-
-      // Verify state for CSRF protection
-      if (!state || state !== req.session.oauthState) {
-        console.error("State mismatch:", { received: state, expected: req.session.oauthState });
-        return res.redirect("/?error=invalid_state");
-      }
-
-      // Clear the state from session
-      delete req.session.oauthState;
-
-      const clientId = process.env.DISCORD_CLIENT_ID;
-      const clientSecret = process.env.DISCORD_CLIENT_SECRET;
-      const redirectUri = process.env.DISCORD_REDIRECT_URI;
-
-      if (!clientId || !clientSecret || !redirectUri) {
-        console.error("Discord OAuth missing credentials");
-        return res.redirect("/?error=config_missing");
-      }
-
-      // Exchange code for access token
-      const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          client_id: clientId,
-          client_secret: clientSecret,
-          grant_type: 'authorization_code',
-          code: code as string,
-          redirect_uri: redirectUri,
-        }),
-      });
-
-      const tokenData = await tokenResponse.json();
-
-      if (!tokenData.access_token) {
-        console.error("Failed to get access token:", tokenData);
-        return res.redirect("/?error=token_exchange_failed");
-      }
-
-      // Get Discord user data
-      const userResponse = await fetch('https://discord.com/api/users/@me', {
-        headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
-        },
-      });
-
-      const discordUser = await userResponse.json();
-      
-      if (!discordUser.id) {
-        console.error("Failed to get Discord user:", discordUser);
-        return res.redirect("/?error=user_fetch_failed");
-      }
-
-      // Find or create user
-      let user = await storage.getUserByDiscordId(discordUser.id);
-      
-      if (!user) {
-        user = await storage.createUser({
-          discordId: discordUser.id,
-          username: discordUser.username,
-          email: discordUser.email,
-          avatar: discordUser.avatar 
-            ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` 
-            : null,
-          role: "freelancer", // Default role
-        });
-
-        // Create wallet for new user
-        await storage.createWallet({
-          userId: user.id,
-          walletAddress: `0x${Math.random().toString(36).substring(2, 15)}`,
-        });
-      }
-
-      // Set session
-      req.session.userId = user.id;
-      req.session.userRole = user.role;
-
-      res.redirect("/dashboard");
-    } catch (error) {
-      console.error("OAuth callback error:", error);
-      res.redirect("/?error=callback_failed");
     }
   });
 
@@ -2381,14 +2247,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sourceId: job.id,
       });
 
-      // Post to Discord webhook
-      try {
-        await postToDiscordWebhook(
-          `New job approved: "${job.title}" | Budget: $${job.budget} | Category: ${job.category}`
-        );
-      } catch (e) {
-        console.error("Discord webhook error:", e);
-      }
 
       res.json(updatedJob);
     } catch (error) {
@@ -4237,10 +4095,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sourceId: job.id,
       });
 
-      // Post to Discord webhook
-      await postToDiscordWebhook(
-        `🎉 New job approved: **${job.title}**\nBudget: $${job.budget}\nCategory: ${job.category}\n${job.description.slice(0, 100)}...`
-      );
 
       res.json(job);
     } catch (error) {
@@ -6312,13 +6166,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sourceId: job.id,
       });
 
-      // Send Discord notification
-      const invitedUser = await storage.getUser(userId);
-      if (invitedUser) {
-        await postToDiscordWebhook(
-          `🤝 ${invitedUser.username}, you've been invited to collaborate on: **${job.title}**`
-        );
-      }
 
       res.json(invitation);
     } catch (error) {

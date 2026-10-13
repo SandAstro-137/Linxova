@@ -142,15 +142,15 @@ export function AppSidebar() {
           <SidebarGroupLabel className="flex items-center gap-2 px-2 py-4">
             <img 
               src={logoLight} 
-              alt="Linxora" 
+              alt="Linxova" 
               className="w-6 h-6 dark:hidden"
             />
             <img 
               src={logoDark} 
-              alt="Linxora" 
+              alt="Linxova" 
               className="w-6 h-6 hidden dark:block"
             />
-            <span className="text-lg font-bold text-primary">Linxora</span>
+            <span className="text-lg font-bold text-primary">Linxova</span>
             {user && (
               <Badge variant="secondary" className="ml-auto text-xs">
                 {user.role}
@@ -204,7 +204,7 @@ export function AppSidebar() {
         onOpenChange={setBugReportOpen}
         targetId="platform"
         reportType="bug"
-        targetName="Linxora Platform"
+        targetName="Linxova Platform"
         allowTypeSelection
       />
     </Sidebar>

@@ -500,9 +500,6 @@ export default function CurrentJobPage() {
                   <p className="font-semibold" data-testid="text-customer-username">
                     {enrichedJob?.customerUsername || "Customer"}
                   </p>
-                  <p className="text-sm text-muted-foreground" data-testid="text-customer-discord">
-                    {enrichedJob?.customerDiscordId}
-                  </p>
                 </div>
               </div>
             </CardContent>

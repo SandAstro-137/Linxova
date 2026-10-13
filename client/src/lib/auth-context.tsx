@@ -10,7 +10,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   suspensionInfo: SuspensionInfo | null;
-  login: (discordId?: string) => void;
+  login: (demoId: string) => Promise<void>;
   logout: () => void;
   refetchUser: () => Promise<void>;
   clearSuspension: () => void;
@@ -60,9 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = async (discordId?: string) => {
-    if (discordId) {
-      try {
+  const login = async (demoId: string) => {
+    try {
         const response = await fetch("/api/auth/dev-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -87,9 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Login failed:", error);
       }
-    } else {
-      window.location.href = "/api/auth/discord";
-    }
   };
 
   const logout = async () => {

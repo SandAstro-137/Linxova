@@ -19,7 +19,7 @@ export default function LinoPage() {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hi there! I'm Lino, your Linxora support assistant. I can help you with questions about using the platform — jobs, wallet, roles, moderation, and more. What can I help you with?",
+      content: "Hi there! I'm Lino, your Linxova support assistant. I can help you with questions about using the platform — jobs, wallet, roles, moderation, and more. What can I help you with?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -133,7 +133,7 @@ export default function LinoPage() {
       {
         id: "welcome",
         role: "assistant",
-        content: "Hi there! I'm Lino, your Linxora support assistant. I can help you with questions about using the platform — jobs, wallet, roles, moderation, and more. What can I help you with?",
+        content: "Hi there! I'm Lino, your Linxova support assistant. I can help you with questions about using the platform — jobs, wallet, roles, moderation, and more. What can I help you with?",
       },
     ]);
   };
@@ -147,7 +147,7 @@ export default function LinoPage() {
           </div>
           <div>
             <h2 className="text-lg font-semibold" data-testid="text-lino-title">Lino</h2>
-            <p className="text-sm text-muted-foreground">Linxora Support Assistant</p>
+            <p className="text-sm text-muted-foreground">Linxova Support Assistant</p>
           </div>
         </div>
         <Button
@@ -205,7 +205,7 @@ export default function LinoPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask Lino about Linxora..."
+            placeholder="Ask Lino about Linxova..."
             className="resize-none min-h-[44px] max-h-[120px]"
             rows={1}
             disabled={isStreaming}

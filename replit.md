@@ -1,16 +1,16 @@
-# Linxora - Professional Freelancer Job Marketplace
+# Linxova - Professional Freelancer Job Marketplace
 
 ## Overview
-Linxora is a full-stack job marketplace designed to connect freelancers with customers through a moderated platform. It offers secure payment processing, real-time Discord integrations, and comprehensive freelancer management tools. The platform aims to provide a seamless and secure environment for project collaboration, featuring role-based access control, automated profit splitting for team projects, and a robust job moderation system. Linxora's vision is to become a leading platform in the freelance economy by efficiently matching talent with opportunities.
+Linxova is a full-stack job marketplace designed to connect freelancers with customers through a moderated platform. It offers secure payment processing, real-time Discord integrations, and comprehensive freelancer management tools. The platform aims to provide a seamless and secure environment for project collaboration, featuring role-based access control, automated profit splitting for team projects, and a robust job moderation system. Linxova's vision is to become a leading platform in the freelance economy by efficiently matching talent with opportunities.
 
 ## User Preferences
 I want iterative development. Ask before making major changes. I prefer detailed explanations.
 
 ## System Architecture
-Linxora is built with a React frontend, an Express Node.js backend, and MongoDB Atlas for data persistence.
+Linxova is built with a React frontend, an Express Node.js backend, and MongoDB Atlas for data persistence.
 
 **UI/UX Decisions:**
-- **Branding:** Consistent Linxora branding throughout the platform.
+- **Branding:** Consistent Linxova branding throughout the platform.
 - **Components:** Utilizes Shadcn UI components and Tailwind CSS for a modern and responsive user interface.
 - **Typography:** Employs Inter and JetBrains Mono fonts for readability.
 - **Timezone:** All dates and times are standardized and displayed in Eastern Time (ET).
